@@ -291,6 +291,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pycryptodome"
+version = "3.17"
+description = "Cryptographic library for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
 name = "pycryptodomex"
 version = "3.16.0"
 description = "Cryptographic library for Python"
@@ -420,7 +428,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3e6940aa75dadbea684c854f4a391ce72ee1c7d0ce6740772ca14d9404ee0cc1"
+content-hash = "565996ebde36d0485d636aa15a9f49c7597009371af878cd57d130f0bb73626f"
 
 [metadata.files]
 aiohttp = []
@@ -448,6 +456,7 @@ passlib = []
 protobuf = []
 pycparser = []
 pycrypto = []
+pycryptodome = []
 pycryptodomex = []
 pyseto = []
 pytermtk = []
