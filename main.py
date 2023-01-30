@@ -13,7 +13,6 @@ import characters.lifepath as cl
 import database.database
 from replit import db
 
-
 def main1():
 	cp._punkInit()
 	root = ttk.TTk()

@@ -780,11 +780,14 @@ class FullSheet:
 class CreateCharacter:
 	'''
  	Step1: Biological Information
-   	--Step2: Life Path -> provide dropdowns for ethnicity + language
-	--rerolls too
+  	Step2: Family
+   	Step3: Life Path
+   		Life Path -> provide dropdowns for ethnicity + language
+		--rerolls too
  
-   	Step3: Stats
-	Step4: Skills
+   	Step4: Stats
+	Step5: Role
+	Step6: Skills
  	FINAL CHARACTER CHECK
   
  	--Step5: Living Expenses
@@ -923,6 +926,9 @@ class CreateCharacter:
 				temp = b
 
 	def Next(self, v=None):
+		###################
+		#self.root.close()#
+		###################
 		buttons = [
 		    self.step1, self.step2, self.step3, self.step4, self.step5,
 		    self.step6
