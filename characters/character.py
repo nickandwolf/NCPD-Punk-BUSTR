@@ -1,7 +1,8 @@
 '''
-Night City Police Department 'Punk' B.U.S.T.R.
-Official Name: Biotelemetric Unlocated Scene Threat Reposity
-AKA Beat Up Street Trash Repository
+JAN2023
+Fair warning, this entire thing is fuq'd and long. It'll need to be redone at some point but for now we're aiming for v1.
+
+Not gonna break it into multiple files yet...
 '''
 import TermTk as ttk
 import skills.skills as ss
@@ -11,6 +12,53 @@ import characters.lifepath as cl
 from random import randint as r
 import os
 
+#Universal Functions
+def _textLabelHeight(length, text, tab=8):
+	if text == "":
+		return 6
+	height = tab
+	labelText = "	"
+	for thing in text.split(" "):
+		if "|" in thing:
+			height += 2
+		elif len(labelText + thing) <= length:
+			labelText += thing + " "
+
+		else:
+			height += 1
+			labelText = thing + " "
+	return height
+
+def _splitTextLabel(start, length, frame, text, tab=True, temp=[]):
+		#go to index at length. see if it is a space. if not go backwards until there is a space. then clip there. make label, start next part
+		posx = start[0]
+		posy = start[1]
+		ycount = 0
+		if tab: labelText = "	"
+		else: labelText=""
+		for thing in text.split(" "):
+			if "|" in thing:
+				t = thing.split("|")
+				labelText += t[0]
+				temp.append(ttk.TTkLabel(parent=frame,
+				             pos=(posx, posy + ycount),
+				             size=(length, 1),
+				             text=labelText))
+				ycount += 2
+				labelText = "	" + t[1] + " "
+			elif len(labelText + thing) <= length:
+				labelText += thing + " "
+			else:
+				temp.append(ttk.TTkLabel(parent=frame,
+				             pos=(posx, posy + ycount),
+				             size=(length, 1),
+				             text=labelText))
+				ycount += 1
+				labelText = thing + " "
+		temp.append(ttk.TTkLabel(parent=frame,
+		             pos=(posx, posy + ycount),
+		             size=(length, 1),
+		             text=labelText))
 
 class FullSheet:
 	def __init__(self, character=cp.Punk()):
@@ -67,7 +115,7 @@ class FullSheet:
 
 		ttk.TTkLabel(parent=bioFrame, text="[Name:", pos=(0, 1), size=(6, 1))
 		self.name = ttk.TTkLineEdit(parent=bioFrame,
-		                            text=self.character.name,
+		                            text=self.character.firstName + " " + self.character.lastName,
 		                            pos=(6, 1),
 		                            size=(14, 1))
 
@@ -546,7 +594,7 @@ class FullSheet:
 			skillPopWin = ttk.TTkWindow(
 			    parent=self.root.viewport(),
 			    pos=(4, 4),
-			    size=(38, self._textLabelHeight(36, btn.description)),
+			    size=(38, _textLabelHeight(36, btn.description)),
 			    title=btn.name + " " + btn.reference,
 			    border=True)
 			desc = ""
@@ -573,25 +621,10 @@ class FullSheet:
 			        btn.cost) + ")"
 			ttk.TTkLabel(parent=skillPopWin, pos=(0, 1), text=desc)
 			ttk.TTkButton(parent=skillPopWin, pos=(30, 1), text="BUY")
-			self._splitTextLabel([0, 3], 36, skillPopWin, btn.description)
+			_splitTextLabel([0, 3], 36, skillPopWin, btn.description)
 			skillPopWin.raiseWidget()
 
-	def _textLabelHeight(self, length,
-	                     text):  #TODO:maybe make this just for other shit?
-		if text == "":
-			return 6
-		height = 8
-		labelText = "	"
-		for thing in text.split(" "):
-			if "|" in thing:
-				height += 2
-			elif len(labelText + thing) <= length:
-				labelText += thing + " "
-
-			else:
-				height += 1
-				labelText = thing + " "
-		return height
+	
 
 	def GetStat(self, stat):
 		if stat == "INT":
@@ -614,35 +647,7 @@ class FullSheet:
 			return self.currentEmp.value()
 		return 0
 
-	def _splitTextLabel(self, start, length, frame, text):
-		#go to index at length. see if it is a space. if not go backwards until there is a space. then clip there. make label, start next part
-		posx = start[0]
-		posy = start[1]
-		ycount = 0
-		labelText = "	"
-		for thing in text.split(" "):
-			if "|" in thing:
-				t = thing.split("|")
-				labelText += t[0]
-				ttk.TTkLabel(parent=frame,
-				             pos=(posx, posy + ycount),
-				             size=(length, 1),
-				             text=labelText)
-				ycount += 2
-				labelText = "	" + t[1] + " "
-			elif len(labelText + thing) <= length:
-				labelText += thing + " "
-			else:
-				ttk.TTkLabel(parent=frame,
-				             pos=(posx, posy + ycount),
-				             size=(length, 1),
-				             text=labelText)
-				ycount += 1
-				labelText = thing + " "
-		ttk.TTkLabel(parent=frame,
-		             pos=(posx, posy + ycount),
-		             size=(length, 1),
-		             text=labelText)
+	
 
 	def _rollSkillDice(self, btn):  #TODO, ADD ABILITY TO USE LUCK
 		#TODO Add special abilities like COMBAT SENSE
@@ -796,7 +801,7 @@ class CreateCharacter:
    	FINAL ITEM CHECK
   	'''
 	def __init__(self):
-		root = ttk.TTk()
+		self.r = ttk.TTk()
 		self.lifepath = cl.LifePath()
 
 		#STEP 1
@@ -807,14 +812,14 @@ class CreateCharacter:
 
 		self.alias = None
 
-		ttk.TTkLabel(parent=root,
+		ttk.TTkLabel(parent=self.r,
 		             text="╔═NCPD Punk B.U.S.T.R. powered by WorldSat═╗",
 		             pos=(0, 0))
-		ttk.TTkLabel(parent=root,
+		ttk.TTkLabel(parent=self.r,
 		             text="╟┈┈┈┈┈┈New Perpetrator Inprocessing┈┈┈┈┈┈┈┈╢",
 		             pos=(0, 1))
 
-		self.root = ttk.TTkWindow(parent=root,
+		self.root = ttk.TTkWindow(parent=self.r,
 		                          pos=(0, 2),
 		                          size=(44, 15),
 		                          draggable=False,
@@ -881,21 +886,24 @@ class CreateCharacter:
 		                          size=(11, 5))
 		self.next.clicked.connect(self.Next)
 
-		ttk.TTkButton(parent=self.root,
+		self.saveButton = ttk.TTkButton(parent=self.root,
 		              text=">SAVE<",
 		              pos=(16, 8),
 		              border=True,
-		              size=(11, 3)).clicked.connect(self.Save)
+		              size=(11, 3))
+		self.saveButton.clicked.connect(self.Save)
 
 		self.saveStatus = ttk.TTkLabel(parent=self.root,
 		                               pos=(16, 7),
 		                               text=" [UNSAVED]",
 		                               color=ttk.TTkColor.fg("#FF0000"))
 
-		self.screen = None
-		self.Step1()
-
-		root.mainloop()
+		self.widg = []
+		##DEBUG##
+		#self.Step1()
+		self.Step2()
+		
+		self.r.mainloop()
 		#check here
 
 	def Unsaved(self, v=None):
@@ -925,10 +933,7 @@ class CreateCharacter:
 			else:
 				temp = b
 
-	def Next(self, v=None):
-		###################
-		#self.root.close()#
-		###################
+	def Next(self, v=None):		
 		buttons = [
 		    self.step1, self.step2, self.step3, self.step4, self.step5,
 		    self.step6
@@ -942,12 +947,14 @@ class CreateCharacter:
 				flag = True
 
 	def ButtonPush(self, v=None):
-
+		for a in self.widg:
+			a.close()
+		self.widg = []
+			
 		buttons = [
 		    self.step1, self.step2, self.step3, self.step4, self.step5,
 		    self.step6
 		]
-
 		for b in buttons:
 			if b != v:
 				b.setChecked(False)
@@ -966,10 +973,19 @@ class CreateCharacter:
 		#self.step1._border = False
 		#self.step1._y = -1
 
-	def Step1(self):
 
+	def MoveButtons(self,v=None):
+		self.prev._y = self.root._height - self.prev._height - 4
+		self.next._y = self.root._height - self.next._height - 4
+		self.saveButton._y = self.root._height - self.saveButton._height - 4
+		self.saveStatus._y = self.root._height - self.saveStatus._height - 7		
+	
+	def Step1(self):
 		self.screen = self.step1
+		self.root.resize(44,15)
+		self.MoveButtons()
 		self.prev.setEnabled(False)
+		
 		if self.firstName == None:
 			fn = cp.GetFirstNames()
 			self.firstNameTE = ttk.TTkLineEdit(parent=self.root,
@@ -983,15 +999,15 @@ class CreateCharacter:
 			                                   pos=(14, 0),
 			                                   size=(12, 1),
 			                                   text=fn)
-
-		ttk.TTkLabel(parent=self.root,
+		self.widg.append(self.firstNameTE)
+		self.widg.append(ttk.TTkLabel(parent=self.root,
 		             text="[First Name:",
 		             pos=(1, 0),
-		             size=(12, 1))
+		             size=(12, 1)))
 
 		self.firstNameTE.textChanged.connect(self.Unsaved)
 
-		ttk.TTkLabel(parent=self.root, text="]", pos=(26, 0), size=(1, 1))
+		self.widg.append(ttk.TTkLabel(parent=self.root, text="]", pos=(26, 0), size=(1, 1)))
 
 		if self.lastName == None:
 			ln = cp.GetLastNames()
@@ -1006,20 +1022,20 @@ class CreateCharacter:
 			                                  pos=(14, 1),
 			                                  size=(12, 1),
 			                                  text=ln)
-
-		ttk.TTkLabel(parent=self.root,
+		self.widg.append(self.lastNameTE)
+		self.widg.append(ttk.TTkLabel(parent=self.root,
 		             text="[Last  Name:",
 		             pos=(1, 1),
-		             size=(12, 1))
+		             size=(12, 1)))
 
 		self.lastNameTE.textChanged.connect(self.Unsaved)
 
-		ttk.TTkLabel(parent=self.root, text="]", pos=(26, 1), size=(1, 1))
+		self.widg.append(ttk.TTkLabel(parent=self.root, text="]", pos=(26, 1), size=(1, 1)))
 
-		ttk.TTkLabel(parent=self.root,
+		self.widg.append(ttk.TTkLabel(parent=self.root,
 		             text="[Ethnicity]",
 		             pos=(1, 2),
-		             size=(11, 1))
+		             size=(11, 1)))
 		self.ethnicityCB = ttk.TTkComboBox(
 		    parent=self.root,
 		    pos=(1, 3),
@@ -1028,17 +1044,19 @@ class CreateCharacter:
 		self.ethnicityCB.setCurrentIndex(
 		    self.lifepath.GetEthnicityList().index(self.lifepath.ethnicity))
 		self.ethnicityCB.currentIndexChanged.connect(self.Unsaved)
-
-		ttk.TTkLabel(parent=self.root,
+		
+		self.widg.append(self.ethnicityCB)
+		
+		self.widg.append(ttk.TTkLabel(parent=self.root,
 		             text="[Native Language]",
 		             pos=(1, 4),
-		             size=(18, 1))
+		             size=(18, 1)))
 		self.languageCB = ttk.TTkComboBox(parent=self.root,
 		                                  pos=(1, 5),
 		                                  size=(26, 1),
 		                                  list=self.lifepath.SelectLanguage(
 		                                      self.ethnicityCB.currentText()))
-
+		self.widg.append(self.languageCB)
 		if type(self.lifepath.language) == type(list()):
 			self.languageCB.setCurrentIndex(
 			    self.lifepath.SelectLanguage().index(
@@ -1049,15 +1067,17 @@ class CreateCharacter:
 
 		self.languageCB.currentIndexChanged.connect(self.Unsaved)
 
-		ttk.TTkButton(
+		self.widg.append(ttk.TTkButton(
 		    parent=self.root, pos=(27, 0),
-		    text='🎲').clicked.connect(lambda: self.firstNameTE.setText(
+		    text='🎲'))
+		self.widg[-1].clicked.connect(lambda: self.firstNameTE.setText(
 		        cp.GetFirstNames()[r(0,
 		                             len(cp.GetFirstNames()) - 1)]))
 
-		ttk.TTkButton(
+		self.widg.append(ttk.TTkButton(
 		    parent=self.root, pos=(27, 1),
-		    text='🎲').clicked.connect(lambda: self.lastNameTE.setText(
+		    text='🎲'))
+		self.widg[-1].clicked.connect(lambda: self.lastNameTE.setText(
 		        cp.GetLastNames()[r(0,
 		                            len(cp.GetLastNames()) - 1)]))
 
@@ -1083,18 +1103,28 @@ class CreateCharacter:
 			    r(0,
 			      len(self.languageCB._list) - 1))
 
-		ttk.TTkButton(parent=self.root, pos=(27, 3),
-		              text='🎲').clicked.connect(ChangedEthnicity)
+		self.widg.append(ttk.TTkButton(parent=self.root, pos=(27, 3),
+		              text='🎲'))
+		self.widg[-1].clicked.connect(ChangedEthnicity)
 
-		ttk.TTkButton(
+		self.widg.append(ttk.TTkButton(
 		    parent=self.root, pos=(27, 5),
-		    text='🎲').clicked.connect(lambda: self.languageCB.setCurrentIndex(
+		    text='🎲'))
+		self.widg[-1].clicked.connect(lambda: self.languageCB.setCurrentIndex(
 		        r(0,
 		          len(self.languageCB._list) - 1)))
 
 	def Step2(self):
+		self.root.resize(44,_textLabelHeight(15,self.lifepath.familyBackground,10))
+		self.MoveButtons()
+		self.screen = self.step2
 		self.prev.setEnabled(True)
 
+		
+		lf = ttk.TTkLineEdit(parent=self.root,size=(16,self.root._y-10),pos=(0,0),text="ASIWEF")
+		
+		#_splitTextLabel([14,0], 16, self.root, self.lifepath.familyBackground, False, self.widg)
+		
 	def Step3(self):
 		pass
 

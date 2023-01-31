@@ -149,7 +149,7 @@ class LifePath:
 		    "one or both parents were murdered",
 		    "one or both parents overdosed", "you never knew your parents",
 		    "one or both parents are in hiding to protect you",
-			"you were raised by relatives for safekeeping"
+			"you were raised by relatives for safekeeping",
 		    "the streets raised you", "one or both parents gave you up",
 		    "one or both parents sold you for cash"
 		]
