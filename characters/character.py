@@ -822,13 +822,8 @@ class CreateCharacter:
   	'''
 	def __init__(self):
 		self.r = ttk.TTk()
+		self.punk = cp.Punk()
 		self.lifepath = cl.LifePath()
-
-		#STEP 1
-		self.firstName = None
-		self.lastName = None
-		self.ethnicity = None
-		self.language = None
 
 		self.alias = None
 
@@ -921,7 +916,7 @@ class CreateCharacter:
 		self.widg = []
 		##DEBUG##
 		#self.Step1()
-		self.Step2()
+		self.Step4()
 		
 		self.r.mainloop()
 		#check here
@@ -933,8 +928,8 @@ class CreateCharacter:
 
 	def Save(self, v=None):
 		if self.screen == self.step1:
-			self.firstName = str(self.firstNameTE._text)
-			self.lastName = str(self.lastNameTE._text)
+			self.punk.firstName = str(self.firstNameTE._text)
+			self.punk.lastName = str(self.lastNameTE._text)
 			self.lifepath.ethnicity = self.ethnicityCB.currentText()
 			self.lifepath.language = self.languageCB.currentText()
 			self.lifepath.hairstyle = self.hairCB.currentText()
@@ -958,7 +953,18 @@ class CreateCharacter:
 							a.motivations[3] = self.socialCB.currentText()
 							a.motivations[4] = self.importantItemCB.currentText()
 							a.notes = "".join([str(l) for l in self.te.document()._dataLines])
-				
+		elif self.screen == self.step3:
+			pass
+		elif self.screen == self.step4:
+			self.punk.INT = self.intSB.value()
+			self.punk.REF = self.refSB.value()
+			self.punk.TECH = self.techSB.value()
+			self.punk.COOL = self.coolSB.value()
+			self.punk.ATTR = self.attrSB.value()
+			self.punk.LUCK = self.luckSB.value()
+			self.punk.MA = self.maSB.value()
+			self.punk.BODY = self.bodySB.value()
+			self.punk.EMP = self.empSB.value()
 
 		self.saveStatus._color = ttk.TTkColor.fg("#00FF00")
 		self.saveStatus.setText(" >[SAVED]<")
@@ -1004,7 +1010,9 @@ class CreateCharacter:
 			else:
 				b.setChecked(True)
 
+		self.prev.setEnabled(True)
 		if v == self.step1:
+			self.prev.setEnabled(False)
 			self.Step1()
 		elif v == self.step2:
 			self.Step2()
@@ -1036,9 +1044,8 @@ class CreateCharacter:
 		self.root.resize(44,19)
 		self.root._title = "Biography"
 		self.MoveButtons()
-		self.prev.setEnabled(False)
 		
-		if self.firstName == None:
+		if self.punk.firstName.strip() == "":
 			fn = cp.GetFirstNames()
 			self.firstNameTE = ttk.TTkLineEdit(parent=self.root,
 											   pos=(14, 0),
@@ -1046,7 +1053,7 @@ class CreateCharacter:
 											   text=fn[r(0,
 														 len(fn) - 1)])
 		else:
-			fn = self.firstName
+			fn = self.punk.firstName
 			self.firstNameTE = ttk.TTkLineEdit(parent=self.root,
 											   pos=(14, 0),
 											   size=(12, 1),
@@ -1061,7 +1068,7 @@ class CreateCharacter:
 
 		self.widg.append(ttk.TTkLabel(parent=self.root, text="]", pos=(26, 0), size=(1, 1)))
 
-		if self.lastName == None:
+		if self.punk.lastName.strip() == "":
 			ln = cp.GetLastNames()
 			self.lastNameTE = ttk.TTkLineEdit(parent=self.root,
 											  pos=(14, 1),
@@ -1069,7 +1076,7 @@ class CreateCharacter:
 											  text=ln[r(0,
 														len(ln) - 1)])
 		else:
-			ln = self.lastName
+			ln = self.punk.lastName
 			self.lastNameTE = ttk.TTkLineEdit(parent=self.root,
 											  pos=(14, 1),
 											  size=(12, 1),
@@ -1373,20 +1380,173 @@ class CreateCharacter:
 		self.MoveButtons()
 		self.prev.setEnabled(True)
 
-		lwf = ttk.TTkFrame(parent=self.root, border=True, pos=(-1,-1), size=(15,14))
-		self.lw = ttk.TTkList(parent=lwf,pos=(0,0),size=(13,12),maxWidth=19,minWidth=8)
-		self.widg.append(lwf)
-		self.widg.append(self.lw)
-		
-		self.lw.addItem("THE PERP")
+		self.widg.append(ttk.TTkLabel(parent=self.root, text="Not implemented yet!", pos=(4,3)))
 
-		for a in self.lifepath.knownNPCs:
-			if a.relation == "family":
-				self.lw.addItem(a.name)
+		#lwf = ttk.TTkFrame(parent=self.root, border=True, pos=(-1,-1), size=(15,14))
+		#self.lw = ttk.TTkList(parent=lwf,pos=(0,0),size=(13,12),maxWidth=19,minWidth=8)
+		#self.widg.append(lwf)
+		#self.widg.append(self.lw)
+		
+		#self.lw.addItem("THE PERP")
+
+		#for a in self.lifepath.knownNPCs:
+		#	if a.relation == "family":
+		#		self.lw.addItem(a.name)
 		#self.lw.textClicked.connect(_listCallback)
 
 	def Step4(self):
-		pass
+		self.screen = self.step4
+		self.root.resize(44,19)
+		self.root._title = "Physical Profile"
+		self.MoveButtons()
+
+		pointsL = ttk.TTkFrame(parent=self.root,title="Pts",pos=(0,0),border=True,size=(7,3))
+		self.widg.append(pointsL)
+		points = ttk.TTkLabel(parent=pointsL, text="0xFF",pos=(1,0))
+		self.widg.append(points)
+
+		intSB =  self.punk.INT
+		refSB = self.punk.REF
+		techSB = self.punk.TECH
+		coolSB = self.punk.COOL
+		attrSB = self.punk.ATTR
+		luckSB = self.punk.LUCK
+		maSB = self.punk.MA
+		bodySB = self.punk.BODY
+		empSB = self.punk.EMP
+
+		
+		statDesc = ["Problem solving ability","Dexterity and coodination",
+					"Willpower, determination, and suave","Understanding technology",
+					"That 'something' which keeps you alive","how purty your mouth is",
+					"Movement Allowance, how fast or far you move","Charisma and sympathy, humanity",
+				    "Stamina, brawn, constitution"]
+		
+		_desc = ttk.TTkTextEdit(parent=self.root,document=None,pos=(8,0),size=(23,3))
+		_desc.setReadOnly(True)
+		_desc.setLineWrapMode(ttk.TTkK.WidgetWidth)
+		_desc.setWordWrapMode(ttk.TTkK.WordWrap)
+		_desc.setText(" <ERROR:FILE_NOT_FOUND> __INSERT RECORD DATA// ::(0xA21FD8:CORRUPTED)")
+		
+		self.widg.append(_desc)
+		
+		_min = 3
+		_max = 10
+		
+		### We'll introduce thresholds later ###
+		#self.widg.append(ttk.TTkLabel(parent=self.root, text="Min:",pos=(32,8)))
+		#self.widg.append(ttk.TTkLabel(parent=self.root, text="Max:",pos=(32,9)))
+		
+		#ttk.TTkSpinBox(parent=self.root, value=_min,pos=(37,8),size=(4,1))
+		#ttk.TTkSpinBox(parent=self.root, value=_max,pos=(37,9),size=(4,1))
+
+		#threshold = 7
+		#self.widg.append(ttk.TTkLabel(parent=self.root,text="Limiting Threshold:"))
+				
+		
+		def _buttonCallback(v=None):
+			if v == None:
+				return
+			_desc.setText(statDesc[v])
+
+		def _countPoints(v=None):
+			points.setText(str(self.intSB.value() + self.refSB.value() + self.techSB.value() +
+							   self.coolSB.value() + self.attrSB.value() + self.luckSB.value() +
+							   self.maSB.value() + self.bodySB.value() + self.empSB.value()))
+		
+		intF = ttk.TTkFrame(parent=self.root, border=True, title="INT",pos=(0,3),  size=(7,4))
+		self.intSB = ttk.TTkSpinBox(parent=intF, minimum=_min, maximum=_max,value=intSB,pos=(1,0),size=(4,1))
+		intB = ttk.TTkButton(parent=intF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.intSB.valueChanged.connect(_countPoints)
+		intB.clicked.connect(lambda : _buttonCallback(0))
+
+		self.widg.append(intF)
+		self.widg.append(self.intSB)
+		self.widg.append(intB)
+
+		
+		refF = ttk.TTkFrame(parent=self.root, border=True, title="REF",pos=(8,3),size=(7,4))
+		self.refSB = ttk.TTkSpinBox(parent=refF, minimum=_min, maximum=_max,value=refSB,pos=(1,0),size=(4,1))
+		refB = ttk.TTkButton(parent=refF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.refSB.valueChanged.connect(_countPoints)
+		refB.clicked.connect(lambda : _buttonCallback(1))
+
+		self.widg.append(refF)
+		self.widg.append(self.refSB)
+		self.widg.append(refB)
+
+		techF = ttk.TTkFrame(parent=self.root, border=True, title="TECH",pos=(16,3),  size=(8,4))
+		self.techSB = ttk.TTkSpinBox(parent=techF, minimum=_min, maximum=_max,value=techSB,pos=(1,0),size=(4,1))
+		techB = ttk.TTkButton(parent=techF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.techSB.valueChanged.connect(_countPoints)
+		techB.clicked.connect(lambda : _buttonCallback(3))
+
+		self.widg.append(techF)
+		self.widg.append(self.techSB)
+		self.widg.append(techB)
+
+		coolF = ttk.TTkFrame(parent=self.root, border=True, title="COOL",pos=(24,3),  size=(8,4))
+		self.coolSB = ttk.TTkSpinBox(parent=coolF, minimum=_min, maximum=_max,value=coolSB,pos=(1,0),size=(4,1))
+		coolB = ttk.TTkButton(parent=coolF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.coolSB.valueChanged.connect(_countPoints)
+		coolB.clicked.connect(lambda : _buttonCallback(2))
+
+		self.widg.append(coolF)
+		self.widg.append(self.coolSB)
+		self.widg.append(coolB)
+		
+		attrF = ttk.TTkFrame(parent=self.root, border=True, title="ATTR",pos=(0,7), size=(8,4))
+		self.attrSB = ttk.TTkSpinBox(parent=attrF, minimum=_min, maximum=_max,value=attrSB,pos=(1,0),size=(4,1))
+		attrB = ttk.TTkButton(parent=attrF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.attrSB.valueChanged.connect(_countPoints)
+		attrB.clicked.connect(lambda : _buttonCallback(5))
+
+		self.widg.append(attrF)
+		self.widg.append(self.attrSB)
+		self.widg.append(attrB)
+
+		luckF = ttk.TTkFrame(parent=self.root, border=True, title="LUCK",pos=(8,7),  size=(8,4))
+		self.luckSB = ttk.TTkSpinBox(parent=luckF, minimum=_min, maximum=_max,value=luckSB,pos=(1,0),size=(4,1))
+		luckB = ttk.TTkButton(parent=luckF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.luckSB.valueChanged.connect(_countPoints)
+		luckB.clicked.connect(lambda : _buttonCallback(4))
+
+		self.widg.append(luckF)
+		self.widg.append(self.luckSB)
+		self.widg.append(luckB)
+
+		maF = ttk.TTkFrame(parent=self.root, border=True, title="M.A.",pos=(16,7),  size=(8,4))
+		self.maSB = ttk.TTkSpinBox(parent=maF, minimum=_min, maximum=_max,value=maSB,pos=(1,0),size=(4,1))
+		maB = ttk.TTkButton(parent=maF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.maSB.valueChanged.connect(_countPoints)
+		maB.clicked.connect(lambda : _buttonCallback(6))
+
+		self.widg.append(maF)
+		self.widg.append(self.maSB)
+		self.widg.append(maB)
+
+		bodyF = ttk.TTkFrame(parent=self.root, border=True, title="BODY",pos=(24,7),  size=(8,4))
+		self.bodySB = ttk.TTkSpinBox(parent=bodyF, minimum=_min, maximum=_max,value=bodySB,pos=(1,0),size=(4,1))
+		bodyB = ttk.TTkButton(parent=bodyF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.bodySB.valueChanged.connect(_countPoints)
+		bodyB.clicked.connect(lambda : _buttonCallback(8))
+
+		self.widg.append(bodyF)
+		self.widg.append(self.bodySB)
+		self.widg.append(bodyB)
+
+		empF = ttk.TTkFrame(parent=self.root, border=True, title="EMP",pos=(32,7),  size=(7,4))
+		self.empSB = ttk.TTkSpinBox(parent=empF, minimum=_min, maximum=_max,value=empSB,pos=(1,0),size=(4,1))
+		empB = ttk.TTkButton(parent=empF, text="?",pos=(1,1),border=False,size=(3,1))
+		self.empSB.valueChanged.connect(_countPoints)
+		empB.clicked.connect(lambda : _buttonCallback(7))
+
+		self.widg.append(empF)
+		self.widg.append(self.empSB)
+		self.widg.append(empB)
+
+		_countPoints()
+		
 
 	def Step5(self):
 		pass
