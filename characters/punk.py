@@ -256,7 +256,6 @@ def getKey(obj):
 
 rolesList = []
 
-
 def GetFirstNames():
 	path = os.getcwd()
 	with open(path + "/characters/first_names", 'r') as names:
@@ -282,13 +281,55 @@ def _InitRoles():
 		pass
 
 
-class NPC:
-	def __init__(self):
-		pass
-		'''
-  		first name
-		last name
-  		handle
-		description
-  		notes
-		'''
+class NPC(Punk):
+	def __init__(self,
+				 relation="",
+				 description="",
+	             name="",
+	             handle="",
+	             role="",
+	             age=0,
+	             ATTR=3,
+	             BODY=3,
+	             COOL=3,
+	             EMP=3,
+	             INT=3,
+	             REF=3,
+	             TECH=3,
+	             MA=3,
+	             LUCK=3,
+	             health=0,
+	             rep=0,
+	             humanity=None,
+	             skills=[],
+	             inventory=[],
+	             cyberware=[],
+	             motivations=None,
+				 notes=""):
+		super().__init__(handle,
+	             role,
+	             age,
+	             ATTR,
+	             BODY,
+	             COOL,
+	             EMP,
+	             INT,
+	             REF,
+	             TECH,
+	             MA,
+	             LUCK,
+	             health,
+	             rep,
+	             humanity,
+	             skills,
+	             inventory,
+	             cyberware)
+		
+		self.name = name
+		self.relation = relation
+
+		if motivations == None:
+			self.motivations = cl.Motivations()
+		else: self.motivations=motivations
+		self.notes = notes
+		

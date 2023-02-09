@@ -2,7 +2,7 @@
 name = "naturalboldcopyrightinfringement"
 version = "0.1.0"
 description = ""
-authors = ["NicholasNelson <<>>"]
+authors = ["Nick&Wolf <<>>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

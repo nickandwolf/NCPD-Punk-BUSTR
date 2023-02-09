@@ -1,5 +1,8 @@
 from random import randint as r
+import characters.punk as cp
 
+def getKey(obj):
+	return obj.name
 
 class LifePath:
 	def __init__(self,
@@ -21,6 +24,12 @@ class LifePath:
 		else:
 			self.language = language
 
+		self.knownNPCs = []
+		if knownNPCs == None:
+			self.Siblings()
+		else:
+			self.knownNPCs = knownNPCs
+			
 		dressStyle = self.DressAndStyle()
 		if affectations == None:
 			self.clothes = dressStyle[0]
@@ -40,16 +49,11 @@ class LifePath:
 		else:
 			self.familyBackground = familyBackground
 
-		self.knownNPCs = []
-		if knownNPCs == None:
-			self.Siblings()
-		else:
-			self.knownNPCs = knownNPCs
-
 		if motivations == None:
 			self.motivations = self.Motivations()
 		else:
 			self.motivations = motivations
+		self.knownNPCs.sort(key=getKey)
 
 	def Ethnicity(self):
 		ethnicity = ["Anglo-American","African","Japanese/Korean","Central European/Soviet","Pacific Islander","Chinese/Southeast Asian","Black American","Hispanic American","Central/South American","European"]
@@ -105,34 +109,61 @@ class LifePath:
 
 	def GetHairList(self):
 		return ["Mohawk", "Long & Ratty", "Short & Spiked", "Wild & All Over",
-		    "Bald", "Striped", "Tinted", "Neat & Short", "Short & Curly",
+		    "Bald", "Striped", "Frosted", "Neat & Short", "Short & Curly",
 		    "Long & Straight"]
 
 	def GetAffectationList(self):
 		return ["Tattoos", "Mirrorshades", "Ritual Scars", "Spiked Gloves",
 		    "Nose Rings", "Earrings", "Long Fingernails", "Spiked Boots",
 		    "Weird Contact Lenses", "Fingerless Gloves"]
+
+	def GetPersonalityList(self):
+		return [
+		    "shy & secretive", "rebellious, antisocial, & violent",
+		    "arrogant, proud, & aloof", "moody, rash, & headstrong",
+		    "picky, fussy, & nervous", "cold & serious",
+		    "silly & fluffheaded", "sneaky & deceptive",
+		    "intellectual & detached", "friendly & outgoing"
+		]
+
+	def GetImportantPersonList(self):
+		return [
+		    "a parent", "a sibling or cousin", "a lover", "a friend",
+		    "themself", "a pet", "a teacher or mentor", "a public figure",
+		    "a personal hero", "no one, not even themself"
+		]
+
+	def GetConceptList(self):
+		return [
+		    "money", "honor", "their word", "honesty", "knowledge", "vengeance",
+		    "love", "power", "having a good time", "friendship"
+		]
+
+	def GetImportantItemList(self):
+		return [
+		    "favorite weapon", "favorite tool", "favorite article of clothing",
+		    "photograph", "journal", "mix tape", "musical instrument",
+		    "favorite piece of jewelry", "childhood memento", "letter"
+		]
 	
+	def GetSocialList(self):
+		return [
+		    "likes almost everyone", "hates almost everyone",
+		    "people like tools, meant to be used and then discarded",
+		    "believes every person has value",
+		    "believes people are obstacles to be crushed if they get in your the way",
+		    "believes people are untrustworthy and will only let you down",
+		    "believes mankind deserves to wiped out",
+		    "believes people are wonderful"
+		]
 	def DressAndStyle(self):
-		cList = ["Biker Leathers", "Blue Jeans", "Corporate Suits", "Jumpsuits",
-		    "Miniskirts/Flash", "High Fashion", "Military", "Normal Clothes",
-		    "Near Nude", "Bag Lady Chic"]
-
-		hList = ["Mohawk", "Long & Ratty", "Short & Spiked", "Wild & All Over",
-		    "Bald", "Striped", "Tinted", "Neat & Short", "Short & Curly",
-		    "Long & Straight"]
-
-		aList = ["Tattoos", "Mirrorshades", "Ritual Scars", "Spiked Gloves",
-		    "Nose Rings", "Earrings", "Long Fingernails", "Spiked Boots",
-		    "Weird Contact Lenses", "Fingerless Gloves"]
-		
 		total = []
-		total.append(cList[r(0, len(cList)-1)])
-		total.append(hList[r(0, len(hList)-1)])
-		total.append(aList[r(0, len(aList)-1)])
+		total.append(self.GetClothesList()[r(0, len(self.GetClothesList())-1)])
+		total.append(self.GetHairList()[r(0, len(self.GetHairList())-1)])
+		total.append(self.GetAffectationList()[r(0, len(self.GetAffectationList())-1)])
 		return total
 
-	def FamilyBackground(self, overdosed=False):
+	def FamilyBackground(self, PC=True, overdosed=False):#add PC stuff so it makes sense
 		#You parents were ...
 		familyRanking = [
 		    "Corporate Executives", "Corporate Managers",
@@ -147,18 +178,18 @@ class LifePath:
 		    "one or both parents died in warfare",
 		    "one or both parents died in an accident",
 		    "one or both parents were murdered",
-		    "one or both parents overdosed", "you never knew your parents",
-		    "one or both parents are in hiding to protect you",
-			"you were raised by relatives for safekeeping",
-		    "the streets raised you", "one or both parents gave you up",
-		    "one or both parents sold you for cash"
+		    "one or both parents overdosed", "never knew parents",
+		    "one or both parents are in hiding for protection",
+			"were raised by relatives for safekeeping",
+		    "was raised by the streets", "one or both parents gave their children up",
+		    "one or both parents sold children for cash"
 		]
 		familyStatus = ["Family is in danger", "Family isn't in danger"]
 		#so you ...
 		childhoodEnviron = [
-		    "spent most of your childhood on the streets with no adult supervision",
-		    "spent your childhood in a safe Corporate Suburbia",
-		    "spent your childhood in a Nomad Pack, moving from town to town",
+		    "spent most of childhood on the streets with no adult supervision",
+		    "spent childhood in a safe Corporate Suburbia",
+		    "spent childhood in a Nomad Pack, moving from town to town",
 		    "grew up in a decaying, once upscale neighborhood",
 		    "grew up in a defended Corporate Zone in the central City",
 		    "grew up in the heart of the Combat Zone",
@@ -174,22 +205,37 @@ class LifePath:
 		    "were the target of a long-term conspiracy",
 		    "were scattered to the winds due to misfortune",
 		    "were cursed with a hereditary feud that has lasted generations",
-		    "left you to inherit a family debt which must be honored"
+		    "left children to inherit a family debt which must be honored"
 		]
 
-		story = "Your parents were "
+		story = "Parents were "
 		story += familyRanking[r(0, len(familyRanking)-1)]
 
 		if r(1, 10) > 6:
-			story += " however " + somethingHappened[r(0, len(somethingHappened)-1)]
+			story += ". " + somethingHappened[r(0, len(somethingHappened)-1)].capitalize()
+		roll = r(0,3)
 
+		if roll == 0:#work this out more
+			self.AddKnownNPC("Father","family",self.Motivations(),"Alive")
+			self.AddKnownNPC("Mother","family",self.Motivations(),"Alive")
+		elif roll == 1:
+			self.AddKnownNPC("Father","family",self.Motivations(),"Dead")
+			self.AddKnownNPC("Mother","family",self.Motivations(),"Alive")
+		elif roll == 2:
+			self.AddKnownNPC("Father","family",self.Motivations(),"Alive")
+			self.AddKnownNPC("Mother","family",self.Motivations(),"Dead")
+		elif roll == 3:
+			self.AddKnownNPC("Father","family",self.Motivations(),"Dead")
+			self.AddKnownNPC("Mother","family",self.Motivations(),"Dead")
+			
+		
 		#and overdosed
 		if overdosed:
 			story += " and overdosed"
 		if r(1, 10) > 6:
-			story += " and " + familyTragedy[r(0, len(familyTragedy)-1)]
-
-		story += ". So you " + childhoodEnviron[r(0, len(childhoodEnviron)-1)]
+			story += ", parents " + familyTragedy[r(0, len(familyTragedy)-1)]
+			
+		story += ". Children " + childhoodEnviron[r(0, len(childhoodEnviron)-1)]
 
 		if overdosed:
 			story += " and overdosed"
@@ -204,58 +250,43 @@ class LifePath:
 			return
 
 		for i in range(sibNum):
-			story = ""
+			relationship = ""
+			motivations = self.Motivations()
+			notes = ""
+			
 			roll = r(1, 10)
-			if roll < 6: story += "An older"
-			elif roll < 10: story += "A younger"
-			elif roll == 10: story += "A twin"
+			if roll < 6: relationship += "Oldr"
+			elif roll < 10: relationship += "Yngr"
+			elif roll == 10: relationship += "Twin"
 
-			if r(0, 1) == 0: story += " brother who "
-			else: story += " sister who "
+			if r(0, 1) == 0: relationship += " Bro"
+			else: relationship += " Sis"
 
 			like = [
-			    "dislikes you", "likes you", "is neutral to you",
-			    "hero worships you", "hates you"
+			    "Dislikes you", "Likes you", "Is neutral to you",
+			    "Hero worships you", "Hates you"
 			]
-			story += like[r(0, len(like)-1)] + "."
-
-			self.knownNPCs.append(story)
-
+			
+			notes += like[r(0, len(like)-1)] + ". "
+			relationship += " #1"
+			self.AddKnownNPC(relationship,"family",motivations,notes)
+			
+			
+	def AddKnownNPC(self,name1="",relationship1="",motivations1="",notes1=""):
+		x = 2
+		for a in self.knownNPCs:
+			while a.name == name1:
+				name1 = name1.split(" #")[0] + " #" + str(x)
+				x+=1
+		dude = cp.NPC(relation=relationship1,name=name1,motivations=motivations1,notes=notes1)
+		self.knownNPCs.append(dude)
+		#family#friend#associate#enemy#rando
+		
 	def Motivations(self):
-		story = ""
-
-		#You are ...
-		personality = [
-		    "shy and secretive", "rebellious, antisocial, and violent",
-		    "arrogant, proud, and aloof", "moody, rash, and headstrong",
-		    "picky, fussy, and nervous", "cold and serious",
-		    "silly and fluffheaded", "sneaky and deceptive",
-		    "intellectual and detached", "friendly and outgoing"
-		]
-		#The person you care about most is ...
-		person = [
-		    "a parent", "a sibling or cousin", "a lover", "a friend",
-		    "yourself", "a pet", "a teacher or mentor", "a public figure",
-		    "a personal hero", "no one, not even yourself"
-		]
-		#More often than not, you put ... over everything else.
-		concept = [
-		    "money", "honor", "your word", "honesty", "knowledge", "vengeance",
-		    "love", "power", "having a good time", "friendship"
-		]
-		#You ...
-		social = [
-		    "like almost everyone", "hate almost everyone",
-		    "treat people like tools, meant to be used and then discarded",
-		    "believe every person has value",
-		    "believe people are obstacles to be crushed if they get in your the way",
-		    "believe people are untrustworthy and will only let you down",
-		    "believe mankind deserves to wiped out",
-		    "believe people are wonderful"
-		]
-		#You wouldn't be caught dead without your ...
-		item = [
-		    "favorite weapon", "favorite tool", "favorite article of clothing",
-		    "photograph", "journal", "mix tape", "musical instrument",
-		    "favorite piece of jewelry", "childhood toy", "letter"
-		]
+		story = []
+		story.append(self.GetPersonalityList()[r(0,len(self.GetPersonalityList())-1)])
+		story.append(self.GetImportantPersonList()[r(0,len(self.GetImportantPersonList())-1)])
+		story.append(self.GetConceptList()[r(0,len(self.GetConceptList())-1)])
+		story.append(self.GetSocialList()[r(0,len(self.GetSocialList())-1)])
+		story.append(self.GetImportantItemList()[r(0,len(self.GetImportantItemList())-1)])
+		return story
