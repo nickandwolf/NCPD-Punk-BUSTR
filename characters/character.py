@@ -914,9 +914,11 @@ class CreateCharacter:
 									   color=ttk.TTkColor.fg("#FF0000"))
 
 		self.widg = []
+
+		cp._InitRoles()
 		##DEBUG##
 		#self.Step1()
-		self.Step4()
+		self.Step5()
 		
 		self.r.mainloop()
 		#check here
@@ -1549,11 +1551,47 @@ class CreateCharacter:
 		
 
 	def Step5(self):
-		pass
+		self.screen = self.step5
+		self.root.resize(44,24)
+		self.root._title = "Professional Profile"
+		self.MoveButtons()
+
+		lwf = ttk.TTkFrame(parent=self.root, border=True, pos=(-1,-1), size=(13,8))
+		self.roleLW = ttk.TTkList(parent=lwf,pos=(0,0),size=(11,6),maxWidth=19,minWidth=8)
+		self.widg.append(lwf)
+		self.widg.append(self.roleLW)
+
+		for x in cp.rolesList:
+			self.roleLW.addItem(x.name)
+
+		slwf = ttk.TTkFrame(parent=self.root, border=True, pos=(11,-1), size=(21,8))
+		#BUG: Can't make it use the full size of the frame... always cuts off the bottom one
+		self.skillLW = ttk.TTkList(parent=slwf,pos=(0,0),size=(19,7),maxWidth=19,minWidth=8)
+		self.widg.append(slwf)
+		self.widg.append(self.skillLW)
+
+		for x in cp.rolesList[0].skillList:
+			self.skillLW.addItem(x)
+		
+		
+		#self.roleLW.textClicked.connect(_listCallback)
+		self.roleLW.items()[0].selected = True
+		self.roleLW.items()[0].highlighted = True
+
+		self.te = ttk.TTkTextEdit(parent= (tef:=ttk.TTkFrame(parent=self.root,
+						pos=(0,6),size=(42,10),border=True)),
+						document=None,pos=(0,0),size=(40,8))
+		self.widg.append(self.te)
+		self.widg.append(tef)
+		self.te.setReadOnly(True)
+		self.te.setLineWrapMode(ttk.TTkK.WidgetWidth)
+		self.te.setWordWrapMode(ttk.TTkK.WordWrap)
+		self.te.setText(cp.rolesList[0].description)
+		
 	
 	def Step6(self):
 		# THIS SHIT ALSO NEEDS TO BE FIXED IN THE NEXT PYTERMTK UPDATE
-		self.next._text = ttk.TTkString("SHIT")
+		self.next._text = ttk.TTkString("test")
 
 	def ChangeStep(self, step):
 		pass

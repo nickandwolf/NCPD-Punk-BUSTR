@@ -1,6 +1,7 @@
 import csv
 import os
 import math
+from random import randint as r
 
 rolesList = []
 firstNames = []
@@ -235,16 +236,25 @@ class Punk:
 			ma = self.MA
 		return ma  #gotta add cybernetic shit
 
+	def ParseLifeEvents(self):
+		for x in self.lifepath.events:
+			pass
+
 	def __repr__(self):
 		return self.name
 
 
 class Role:  #TODO: Choosing THIS or THAT in creation...
-	def __init__(self, name="", description="", skillList=[], reference=""):
+	def __init__(self, name="", description="", skillList="", reference=""):
 		self.name = name
-		self.description = description
+		self.description = ""
+		for x in description.split('|'):
+			self.description += x + "\n"
+		#self.description = description
 		self.reference = reference
-		self.skillList = skillList
+		self.skillList = []
+		for x in skillList.split(';'):
+			self.skillList.append(x)
 
 	def __repr__(self):
 		return self.name
@@ -267,13 +277,16 @@ def GetLastNames():
 		return names.read().split(', ')
 
 
+def GetFirstLastName():
+	return GetFirstNames()[r(0,len(GetFirstNames())-1)] + " " + GetLastNames()[r(0,len(GetLastNames())-1)]
+
 def _InitRoles():
 	path = os.getcwd()
 	if rolesList == []:
 		with open(path + "/characters/roles_cc.csv", 'r') as csvFile:
 			reader = csv.reader(csvFile, delimiter="`")
 			for row in reader:
-				thing = Role(row[0], row[1], row[2], row[3])
+				thing = Role(row[0], row[1], row[3], row[2])
 				if thing not in rolesList:
 					rolesList.append(thing)
 		rolesList.sort(key=getKey)  #don't forget to add the skills <.<
