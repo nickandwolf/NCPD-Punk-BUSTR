@@ -10,6 +10,7 @@ pyTermTk = "^0.14.0-alpha.0"
 replit = "^3.2.5"
 pycrypto = "^2.6.1"
 pycryptodome = "^3.17"
+PySimpleGUI = "^4.60.4"
 
 [tool.poetry.dev-dependencies]
 

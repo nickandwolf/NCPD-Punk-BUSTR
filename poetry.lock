@@ -324,6 +324,14 @@ pycryptodomex = ">=3.12.0,<4.0.0"
 docs = ["Sphinx[docs] (>=4.3.2,<6.0.0)", "sphinx-autodoc-typehints[docs] (==1.12.0)", "sphinx-rtd-theme[docs] (>=1.0.0,<2.0.0)"]
 
 [[package]]
+name = "pysimplegui"
+version = "4.60.4"
+description = "Python GUIs for Humans. Launched in 2018. It's 2022 & PySimpleGUI is an ACTIVE & supported project. Super-simple to create custom GUI's. 325+ Demo programs & Cookbook for rapid start. Extensive documentation. Main docs at www.PySimpleGUI.org. Fun & your success are the focus. Examples using Machine Learning (GUI, OpenCV Integration), Rainmeter Style Desktop Widgets, Matplotlib + Pyplot, PIL support, add GUI to command line scripts, PDF & Image Viewers. Great for beginners & advanced GUI programmers."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pytermtk"
 version = "0.14.0a0"
 description = "Python Terminal Toolkit"
@@ -428,7 +436,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "565996ebde36d0485d636aa15a9f49c7597009371af878cd57d130f0bb73626f"
+content-hash = "54f22f4a5fcd371c6f57f30f9c4e578b0a6a2142558ce81f1955bae18eb26007"
 
 [metadata.files]
 aiohttp = []
@@ -459,6 +467,7 @@ pycrypto = []
 pycryptodome = []
 pycryptodomex = []
 pyseto = []
+pysimplegui = []
 pytermtk = []
 replit = []
 requests = []
