@@ -33,7 +33,8 @@ class Punk:
 	             eurobucks=0,
 	             income=0,
 	             employed=False,
-	             lifepath=None):
+	             lifepath=None,
+				 notes=""):
 		#Life
 		self.firstName = firstName
 		self.lastName = lastName
@@ -70,6 +71,7 @@ class Punk:
 		#Posessions
 		self.inventory = inventory
 		self.cyberware = cyberware
+		self.notes = notes
 
 	def GetTotalStatPoints(self):
 		return self.ATTR + self.BODY + self.COOL + self.EMP + self.INT + self.REF + self.TECH + self.MA + self.LUCK

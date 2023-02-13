@@ -83,7 +83,7 @@ def _splitText(length,text,tab):
 class FullSheet:
 	def __init__(self, character=cp.Punk()):
 		self.character = character
-		cp._InitRoles()
+		#cp._InitRoles()
 		root = ttk.TTk()
 		self.root = ttk.TTkScrollArea(parent=root, size=(97, 25), pos=(0, 0))
 		#self.root.setHorizontalScrollBarPolicy(ttk.TTkK.ScrollBarAlwaysOff)
@@ -104,6 +104,7 @@ class FullSheet:
 		self.BuildDerivedStats()
 		self.BuildArmor()
 		self.BuildSkills()
+		self.BuildNotesBeta()
 		root.mainloop()
 
 	def BuildBio(self):
@@ -646,6 +647,26 @@ class FullSheet:
 
 	
 
+	def BuildNotesBeta(self):
+		notesFrame = ttk.TTkFrame(parent=self.root.viewport(),
+								title="NOTES/MISSING STUFF",
+								border=True,
+								pos=(48, 16),
+								size=(34, 30))
+		self.te = ttk.TTkTextEdit(parent= notesFrame,document=None,pos=(0,0),size=(32,28))
+		self.te.setReadOnly(False)
+		self.te.setLineWrapMode(ttk.TTkK.WidgetWidth)
+		self.te.setWordWrapMode(ttk.TTkK.WordWrap)
+		self.te.setText(self.character.notes)
+
+		saveFrame = ttk.TTkFrame(parent=self.root.viewport(), border=False, pos=(11,41),size=(37,5))
+		load = ttk.TTkButton(parent=saveFrame,text="LOAD", border=True,pos=(3,0),size=(8,5))
+		load.clicked.connect(self._Load)
+
+		save = ttk.TTkButton(parent=saveFrame,text="SAVE", border=True,pos=(18,0),size=(8,5))
+
+	def _Load(self, v=None):
+		pass
 	def GetStat(self, stat):
 		if stat == "INT":
 			return self.int.value()
@@ -915,7 +936,7 @@ class CreateCharacter:
 
 		self.widg = []
 
-		cp._InitRoles()
+		#cp._InitRoles()
 		##DEBUG##
 		#self.Step1()
 		self.Step5()
@@ -1561,8 +1582,8 @@ class CreateCharacter:
 		self.widg.append(lwf)
 		self.widg.append(self.roleLW)
 
-		for x in cp.rolesList:
-			self.roleLW.addItem(x.name)
+		#for x in cp.rolesList:
+		#	self.roleLW.addItem(x.name)
 
 		slwf = ttk.TTkFrame(parent=self.root, border=True, pos=(11,-1), size=(21,8))
 		#BUG: Can't make it use the full size of the frame... always cuts off the bottom one
@@ -1570,8 +1591,8 @@ class CreateCharacter:
 		self.widg.append(slwf)
 		self.widg.append(self.skillLW)
 
-		for x in cp.rolesList[0].skillList:
-			self.skillLW.addItem(x)
+		#for x in cp.rolesList[0].skillList:
+		#	self.skillLW.addItem(x)
 		
 		
 		#self.roleLW.textClicked.connect(_listCallback)
@@ -1586,7 +1607,7 @@ class CreateCharacter:
 		self.te.setReadOnly(True)
 		self.te.setLineWrapMode(ttk.TTkK.WidgetWidth)
 		self.te.setWordWrapMode(ttk.TTkK.WordWrap)
-		self.te.setText(cp.rolesList[0].description)
+		#self.te.setText(cp.rolesList[0].description)
 		
 	
 	def Step6(self):

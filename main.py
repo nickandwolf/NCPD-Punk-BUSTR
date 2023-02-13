@@ -25,12 +25,12 @@ def main1():
 
 def main():
 	ss._skillInit()
-	#cc.FullSheet()
+	cc.FullSheet()
 	#poop = cl.LifePath()
 	#for i in poop.knownNPCs:
 	#	print(i)
 	#print(poop.FamilyBackground())
-	cc.CreateCharacter()
+	#cc.CreateCharacter()
 	# ^^^ DEBUG ^^^
 	'''
 	rootLayout = ttk.TTkGridLayout()
