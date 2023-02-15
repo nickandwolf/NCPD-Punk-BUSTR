@@ -234,6 +234,14 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "login"
+version = "0.0.6"
+description = "Module for common login service"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -275,20 +283,23 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "pyaescrypt"
+version = "6.0.0"
+description = "Encrypt and decrypt files and streams in AES Crypt format (version 2)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+cryptography = "*"
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[[package]]
-name = "pycrypto"
-version = "2.6.1"
-description = "Cryptographic modules for Python."
-category = "main"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "pycryptodome"
@@ -436,7 +447,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "54f22f4a5fcd371c6f57f30f9c4e578b0a6a2142558ce81f1955bae18eb26007"
+content-hash = "51190398abb8d6c5ece62b57e923080540b4ffdad454f5dc09d6ad742bdab508"
 
 [metadata.files]
 aiohttp = []
@@ -458,12 +469,13 @@ importlib-metadata = []
 iso8601 = []
 itsdangerous = []
 jinja2 = []
+login = []
 markupsafe = []
 multidict = []
 passlib = []
 protobuf = []
+pyaescrypt = []
 pycparser = []
-pycrypto = []
 pycryptodome = []
 pycryptodomex = []
 pyseto = []

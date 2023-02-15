@@ -1,5 +1,5 @@
 import TermTk as ttk
-import punks.punk as pp
+import punk as pp
 
 class FullSheet:
 	def __init__(self, punk=pp.Punk()):
@@ -65,6 +65,10 @@ class FullSheet:
 		self.humanity.textEdited.connect(HumanityChanged)
 
 	def BuildStats(self): #TODO: Clean out unnecessary variables
+		def ChangeMA(v=-1):
+			self.run.setText(str(self.punk.GetRun()))
+			self.leap.setText(str(self.punk.GetLeap()))
+			self.swim.setText(str(self.punk.GetSwim()))
 		def StatChanged(v=-1):
 			self.punk.SetStat(None,[self.attr.value(), self.body.value(), self.cool.value(),
 									self.emp.value(), self.int.value(), self.ref.value(),
@@ -119,13 +123,14 @@ class FullSheet:
 															pos=(2, 24), size=(6, 3)),
 										value=self.punk.GetCurrentMA(), pos=(0, 0),
 										size=(4, 1))
-		#self.currentMA.valueChanged.connect(self.ChangeMA)
+		self.currentMA.valueChanged.connect(ChangeMA)
 
 		self.body = ttk.TTkSpinBox(parent=ttk.TTkFrame(parent=statFrame, border=True,
 													   title="BODY", pos=(0, 27), size=(8, 3)),
 								   value=self.punk.BODY, pos=(1, 0), size=(4, 1))
-		self.body.valueChanged.connect(self.ChangeBody)
 		self.body.valueChanged.connect(StatChanged)
+		self.body.valueChanged.connect(self.ChangeBody)
+		
 
 		self.emp = ttk.TTkSpinBox(parent=ttk.TTkFrame(parent=statFrame, border=True,
 													  title="EMP", pos=(0, 30), size=(8, 3)),

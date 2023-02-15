@@ -8,6 +8,7 @@ https://towardsdatascience.com/finding-performance-bottlenecks-in-python-4372598
 
 import sys
 import importlib
+import saveLoadExport as sle
 
 def main(GUI=None):
 	''' Different versions go here '''
@@ -19,16 +20,12 @@ def main(GUI=None):
 	else:
 		args = sys.argv[1]
 		
-	if args == "pytermtk":
-		gui = importlib.import_module('pytermtk.landing')
-		gui.main()
-	elif args == "tkinter":
+	try:
+		gui = importlib.import_module(args + '.landing')
+	except:
 		gui = importlib.import_module('tkinter')
 
-	
-	
-
-
+	gui.main()
 		
 if __name__ == "__main__":
 	main()

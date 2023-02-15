@@ -1,0 +1,8 @@
+https://stackoverflow.com/questions/47573258/writing-text-over-a-pdf-in-python3
+
+from os import environ
+
+if "REPL_OWNER" in environ:
+    print(f"Hello, {environ['REPL_OWNER']}.")
+else:
+    print("Not using replit.")
