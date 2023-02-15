@@ -18,6 +18,7 @@ class FullSheet:
 		self.BuildArmor()
 		#self.BuildSkills()
 		#self.BuildNotesBeta()
+		self.SaveLoadExport()
 		
 		root.mainloop()
 
@@ -118,7 +119,7 @@ class FullSheet:
 								 pos=(0, 22), size=(8, 3)), value=self.punk.MA, pos=(1, 0),
 								 size=(4, 1))  #this is more for the record than for automation
 		self.MA.valueChanged.connect(StatChanged)
-		#NOTE:Do we need this variable? We'll find out!
+		 
 		self.currentMA = ttk.TTkSpinBox(parent=ttk.TTkFrame(parent=statFrame,border=True,
 															pos=(2, 24), size=(6, 3)),
 										value=self.punk.GetCurrentMA(), pos=(0, 0),
@@ -346,3 +347,6 @@ class FullSheet:
 		if int(gg) > -1:
 			gg = "+" + gg
 		self.DMG.setText(gg)
+	def SaveLoadExport(self):
+		saveFrame = ttk.TTkFrame(parent=self.root.viewport(), title="STATS", 
+								 pos=(0, 40), size=(10, 37))

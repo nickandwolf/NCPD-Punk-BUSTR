@@ -1,6 +1,7 @@
 import saveLoadExport as sle
 import TermTk as ttk
 import uni
+import pytermtk.viewCharacters
 '''
 Required Widgets
 -Single Line Text Edit with secure entry (the ****** thing)
@@ -17,25 +18,25 @@ def LoginBox():
 	ttk.TTkLabel(parent=lbaf, text="─────────────────────────────────────────────",
 				 pos=(0,1))
 
-	#lbf = ttk.TTkFrame(parent=lbaf,pos=(6,4),size=(33,7), border=False)
-	#ttk.TTkLabel(parent=lbf, text="[USERNAME:",pos=(1,0))
-	#user = ttk.TTkLineEdit(parent=lbf, pos=(11,0), size=(18,1))
-	#ttk.TTkLabel(parent=lbf, text="]",pos=(29,0))
+	lbf = ttk.TTkFrame(parent=lbaf,pos=(6,4),size=(33,7), border=False)
+	ttk.TTkLabel(parent=lbf, text="[USERNAME:",pos=(1,0))
+	user = ttk.TTkLineEdit(parent=lbf, pos=(11,0), size=(18,1))
+	ttk.TTkLabel(parent=lbf, text="]",pos=(29,0))
 
-	#ttk.TTkLabel(parent=lbf, text="[PASSWORD:",pos=(1,1))
-	#password = ttk.TTkLineEdit(parent=lbf, pos=(11,1),
-	#						   size=(18,1),inputType=ttk.TTkK.Input_Password)
-	#ttk.TTkLabel(parent=lbf, text="]",pos=(29,1))
+	ttk.TTkLabel(parent=lbf, text="[PASSWORD:",pos=(1,1))
+	password = ttk.TTkLineEdit(parent=lbf, pos=(11,1),
+							   size=(18,1),inputType=ttk.TTkK.Input_Password)
+	ttk.TTkLabel(parent=lbf, text="]",pos=(29,1))
 
 	def Login():
-		#weGood = sle.CheckUserNamePassword(str(user._text),str(password._text))
+		weGood = sle.CheckUserNamePassword(str(user._text),str(password._text))
 		if True:
-			print("We Good")
-		#else:
-		#	pop = ttk.TTkWindow(parent=root,title="❌ERROR❌",pos=(5,5),size=(22,6))
-		#	ttk.TTkLabel(parent=pop,text="  Unknown User or",pos=(0,0))
-		#	ttk.TTkLabel(parent=pop,text="Password combination",pos=(0,1))
-		#	pop.raiseWidget()
+			pytermtk.viewCharacters.ShowCharacters()
+		else:
+			pop = ttk.TTkWindow(parent=root,title="❌ERROR❌",pos=(5,5),size=(22,6))
+			ttk.TTkLabel(parent=pop,text="  Unknown User or",pos=(0,0))
+			ttk.TTkLabel(parent=pop,text="Password combination",pos=(0,1))
+			pop.raiseWidget()
 
 	def NewUser():
 		pop = ttk.TTkWindow(parent=root,title="NEW USER",pos=(6,2),size=(33,9))
@@ -68,15 +69,14 @@ def LoginBox():
 		ttk.TTkButton(parent=pop, text="MAKE NEW USER",
 				  pos=(1,4),size=(29,1)).clicked.connect(NW)
 			
-		#ttk.TTkLabel(parent=pop,text="Password combination",pos=(0,1))
 		pop.raiseWidget()
 		
 		
 		
-	ttk.TTkButton(parent=lbaf, text="LOGIN",
+	ttk.TTkButton(parent=lbf, text="LOGIN",
 				  pos=(1,3),size=(7,1)).clicked.connect(Login)
-	#ttk.TTkButton(parent=lbf, text="NEW USER",
-	#			  pos=(20,3),size=(10,1)).clicked.connect(NewUser)
+	ttk.TTkButton(parent=lbf, text="NEW USER",
+				  pos=(20,3),size=(10,1)).clicked.connect(NewUser)
 	#ttk.TTkButton(parent=lbf, text="FORGOT PASSWORD",
 	#			  pos=(13,5),size=(17,1)).clicked.connect()
 	
