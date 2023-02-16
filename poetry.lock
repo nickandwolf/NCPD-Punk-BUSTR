@@ -61,6 +61,18 @@ dev = ["pytest", "cogapp", "pre-commit", "wheel"]
 tests = ["pytest"]
 
 [[package]]
+name = "ast"
+version = "0.0.2"
+description = "Conversion between protobuf3 and srcML."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+faster-signatures = ["ed25519ll"]
+signatures = ["keyring", "keyrings.alt", "importlib", "pyxdg"]
+
+[[package]]
 name = "async-timeout"
 version = "4.0.2"
 description = "Timeout context manager for asyncio programs"
@@ -428,13 +440,14 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4ad404a5a189fb8d43e885522d5ffd7bcd1fbba51733fb868a3a89762de84044"
+content-hash = "90d52c5e75a06272688aa06fbaa06c347443a5752524d553bd6bf76247cf3980"
 
 [metadata.files]
 aiohttp = []
 aiosignal = []
 argon2-cffi = []
 argon2-cffi-bindings = []
+ast = []
 async-timeout = []
 attrs = []
 certifi = []

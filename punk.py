@@ -1,4 +1,5 @@
 from random import randint as r
+import skill as ss
 
 class Punk:
 	def __init__(self,
@@ -52,8 +53,10 @@ class Punk:
 		else: self.humanity = humanity
 
 		self.reputation = rep
-
-		self.skills = skills
+		if skills == []:
+			ss._skillInit()
+			self.skills = ss.skillList
+		else: self.skills = skills
 
 		#Economy
 		self.eurobucks = eurobucks

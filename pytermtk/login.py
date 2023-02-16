@@ -29,15 +29,15 @@ def LoginBox():
 	ttk.TTkLabel(parent=lbf, text="]",pos=(29,1))
 
 	def Login():
-		weGood = sle.CheckUserNamePassword(str(user._text),str(password._text))
-		if True:
+		weGood = sle.CheckUserNamePassword(str(user._text).strip(),str(password._text).strip())
+		if weGood:
 			root.quit()
 			pytermtk.viewCharacters.ShowCharacters()
 		else:
-			print("SHIT")
 			pop = ttk.TTkWindow(parent=root,title="❌ERROR❌",pos=(5,5),size=(22,6))
 			ttk.TTkLabel(parent=pop,text="  Unknown User or",pos=(0,0))
 			ttk.TTkLabel(parent=pop,text="Password combination",pos=(0,1))
+			pop.raiseWidget()
 
 	def NewUser():
 		pop = ttk.TTkWindow(parent=root,title="NEW USER",pos=(6,2),size=(33,9))
