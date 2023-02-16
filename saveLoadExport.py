@@ -10,13 +10,21 @@ if "REPL_OWNER" in os.environ:
 else:
 	uni.online = False
 
-def SaveCharacterDB(data=None,name=None):
-	if data == None or user == None: return
+def SaveCharacterDB(data=None,handle=""):
+	if data == None or name == "": return
 	
 	if uni.online:
-		db[user + "`char`" + name] = data
+		db[uni.user + "`char`" + handle] = data.__dict__
 	else:
 		pass
+
+def LoadCharacterDB(handle=""):
+	if handle == "": return
+
+	if uni.online:
+		p = punk.Punk()
+		p.__dict__ = db[uni.user + "`char`" + handle].value
+		return p
 
 def GetCharacters():
 	characters = []
@@ -25,7 +33,6 @@ def GetCharacters():
 			x = x.split('`char`')
 			if len(x) > 1 and x[0] == uni.user:
 				characters.append(x[1]) #make this load a punk object
-				
 	else:
 		pass
 

@@ -4,11 +4,11 @@ import saveLoadExport as sle
 import uni
 
 def main():
-	#if uni.online:
-	#	import pytermtk.login
-		#pytermtk.login()
+	if uni.online:
+		import pytermtk.login
+		pytermtk.login.LoginBox()
 	#TODO, make log in
-	pytermtk.fullCharacterSheet.FullSheet()
+	#pytermtk.fullCharacterSheet.FullSheet()
 	#FullSheet()
 	#cc.CreateCharacter()
 	# ^^^ DEBUG ^^^

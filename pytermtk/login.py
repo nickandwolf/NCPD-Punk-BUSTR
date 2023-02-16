@@ -9,9 +9,9 @@ Required Widgets
 -Window
 '''
 
-root = ttk.TTk()
-
 def LoginBox():
+	root = ttk.TTk()
+	
 	lbaf = ttk.TTkFrame(parent=root,border=True,pos=(0,0),size=(47,14))
 	ttk.TTkLabel(parent=lbaf, text="[Welcome to NCPD Punk B.U.S.T.R.]["
 				 + uni.version + "]",pos=(1,0))
@@ -31,12 +31,13 @@ def LoginBox():
 	def Login():
 		weGood = sle.CheckUserNamePassword(str(user._text),str(password._text))
 		if True:
+			root.quit()
 			pytermtk.viewCharacters.ShowCharacters()
 		else:
+			print("SHIT")
 			pop = ttk.TTkWindow(parent=root,title="❌ERROR❌",pos=(5,5),size=(22,6))
 			ttk.TTkLabel(parent=pop,text="  Unknown User or",pos=(0,0))
 			ttk.TTkLabel(parent=pop,text="Password combination",pos=(0,1))
-			pop.raiseWidget()
 
 	def NewUser():
 		pop = ttk.TTkWindow(parent=root,title="NEW USER",pos=(6,2),size=(33,9))
@@ -82,8 +83,5 @@ def LoginBox():
 	
 	ttk.TTkLabel(parent=lbaf, text="ᵂᵒʳˡᵈˢᵃᵗ ˢʸˢᵗᵉᵐ ˢᵉᶜᵘʳⁱᵗʸ ⁿᵒᵗ ᵍᵘᵃʳᵃⁿᵗᵉᵉᵈ",pos=(3,2))
 	ttk.TTkLabel(parent=lbaf, text="ᵂᵒʳˡᵈˢᵃᵗ ˢʸˢᵗᵉᵐ ˢᵉᶜᵘʳⁱᵗʸ ⁿᵒᵗ ᵍᵘᵃʳᵃⁿᵗᵉᵉᵈ",pos=(3,11))
-
-
-LoginBox()
-
-root.mainloop()
+	
+	root.mainloop()

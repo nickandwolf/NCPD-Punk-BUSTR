@@ -20,10 +20,10 @@ def main(GUI=None):
 	else:
 		args = sys.argv[1]
 		
-	try:
-		gui = importlib.import_module(args + '.landing')
-	except:
-		gui = importlib.import_module('tkinter')
+	#try:
+	gui = importlib.import_module(args + '.landing')
+	#except:
+	#	gui = importlib.import_module('tkinter')
 
 	gui.main()
 		

@@ -1,5 +1,6 @@
 import TermTk as ttk
 import punk as pp
+import saveLoadExport as sle
 
 class FullSheet:
 	def __init__(self, punk=pp.Punk()):
@@ -22,18 +23,32 @@ class FullSheet:
 		
 		root.mainloop()
 
-	def BuildBio(self):
+	def BuildBio(self): #TODO: Autosave is a mess
+		def NameSave(v=""):
+			v = str(v)
+			if v == "": return
+
+			self.punk.firstName = v.split(" ")[0]
+			if " " in v:
+				self.punk.lastName = v.split(" ")[1]
+			
+		def HandleSave(v=""):
+			v = str(v)
+			self.punk.handle = v
+			
 		bioFrame = ttk.TTkFrame(parent=self.root.viewport(), title="BIO",
 								border=True, pos=(0, 0), size=(49, 4))
 
 		ttk.TTkLabel(parent=bioFrame, text="[Handle:", pos=(0, 0), size=(8, 1))
 		self.handle = ttk.TTkLineEdit(parent=bioFrame, text=self.punk.handle,
 									  pos=(8, 0), size=(12, 1))
+		self.handle.textChanged.connect(HandleSave)
 		
 		ttk.TTkLabel(parent=bioFrame, text="][Role:", pos=(20, 0), size=(7, 1))
 		
 		self.role = ttk.TTkLineEdit(parent=bioFrame, pos=(27, 0), size=(12, 1), 
 									text=self.punk.role)
+		#self.role.textChanged.connect(lambda : self.punk.role = str(self.role._text))
 		
 		ttk.TTkLabel(parent=bioFrame, text="][Rep:", pos=(38, 0), size=(6, 1))
 		self.rep = ttk.TTkLineEdit(parent=bioFrame, text=self.punk.reputation,
@@ -41,8 +56,9 @@ class FullSheet:
 		ttk.TTkLabel(parent=bioFrame, text="]", pos=(46, 0), size=(1, 1))
 
 		ttk.TTkLabel(parent=bioFrame, text="[Name:", pos=(0, 1), size=(6, 1))
-		self.name = ttk.TTkLineEdit(parent=bioFrame, text=self.punk.firstName + 
-									" " + self.punk.lastName, pos=(6, 1), size=(14, 1))
+		self.name = ttk.TTkLineEdit(parent=bioFrame, text=(self.punk.firstName + 
+									" " + self.punk.lastName).strip(), pos=(6, 1), size=(14, 1))
+		self.name.textChanged.connect(NameSave)
 
 		ttk.TTkLabel(parent=bioFrame, text="][Age:", pos=(20, 1), size=(6, 1))
 		self.age = ttk.TTkLineEdit(parent=bioFrame, text=self.punk.age, pos=(26, 1),
@@ -347,6 +363,12 @@ class FullSheet:
 		if int(gg) > -1:
 			gg = "+" + gg
 		self.DMG.setText(gg)
-	def SaveLoadExport(self):
-		saveFrame = ttk.TTkFrame(parent=self.root.viewport(), title="STATS", 
-								 pos=(0, 40), size=(10, 37))
+	def SaveLoadExport(self): ##THIS IS TEMPORARY UNTIL VIEW CHARACTERS WORKS
+		def Save():
+			sle.SaveCharacterDB(self.punk,self.punk.handle)
+			
+		saveFrame = ttk.TTkFrame(parent=self.root.viewport(), border=False, 
+								 pos=(0, 46), size=(60, 7))
+		saveB = ttk.TTkButton(parent=saveFrame,pos=(0,0),text="SAVE",border=True,size=(10,3))
+		saveB.clicked.connect(Save)
+		
