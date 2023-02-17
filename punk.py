@@ -53,12 +53,11 @@ class Punk:
 		else: self.humanity = humanity
 
 		self.reputation = rep
-		#if skills == []:
-			#ss._skillInit()
-			#self.skills = ss.skillList
-		#else:
 		self.skills = skills
-
+		if self.skills == []:
+			ss._skillInit()
+			for x in ss.skillList:
+				self.skills.append(dict(x))
 		#Economy
 		self.eurobucks = eurobucks
 		self.income = income

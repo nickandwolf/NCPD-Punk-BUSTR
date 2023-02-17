@@ -3,6 +3,7 @@ import punk as pp
 import saveLoadExport as sle
 import pytermtk.viewCharacters
 import skill as ss
+from random import randint as r
 
 class FullSheet:
 	def __init__(self, punk=pp.Punk()):
@@ -349,7 +350,11 @@ class FullSheet:
 									  size=(14, 3), title="Mortal6 -9")
 		stackHP(mortal6HPFrame)
 
-	def BuildSkills(self):
+	def BuildSkills(self): #TODO: This whole thing is super fucked
+		'''
+  		for saving purposes, punk saves the skill objects as a list of dict
+		we have to reconstruct the punk skills to skill objects
+		'''
 		skillFrame = ttk.TTkFrame(parent=self.root.viewport(),
 								  pos=(10, 16),
 								  size=(38, 30),
@@ -367,7 +372,7 @@ class FullSheet:
 		refSkillFrame = ttk.TTkFrame()
 		techSkillFrame = ttk.TTkFrame()
 
-		def _rollSkillDice(self, btn):  #TODO, ADD ABILITY TO USE LUCK
+		def _rollSkillDice(btn):  #TODO, ADD ABILITY TO USE LUCK
 			#TODO Add special abilities like COMBAT SENSE
 			roll = r(1, 10)
 			popWin = ttk.TTkWindow(
@@ -398,38 +403,78 @@ class FullSheet:
 						 pos=(0, 4),
 						 size=(10, 1))
 			popWin.raiseWidget()
-		def _updateSkill(v="",skl=None):
-			if v == "" or skl == None: return
-			for x in self.punk.skills:
-				if x.name == v.name:
-					x.level = v.level
-					
-		def _dynamicSkills(frame, list):
+		
+		def _skillButtonPull(btn):
+			skillPopWin = ttk.TTkWindow(
+				parent=self.root.viewport(),
+				pos=(4, 4),
+				size=(38, _textLabelHeight(36, btn['description'])),
+				title=btn['name'] + " " + btn['reference'],
+				border=True)
+			desc = ""
+			skillStat = self.GetStat(btn['stat'])
+			#if btn.check.checkState(): desc += "[X] "
+			#else: desc += "[ ] "
+			#if btn.special: desc += "ROLE/" + btn.stat + " : "
+			#else: desc += btn.stat + " : "
+
+			desc += "d10 + " + str(skillStat) + " + " + str(btn['level'])
+			ttk.TTkLabel(parent=skillPopWin, pos=(0, 0), text=desc)
+			ttk.TTkButton(parent=skillPopWin, pos=(30, 0),
+						  text="ROLL").clicked.connect(
+							  lambda btn=btn: _rollSkillDice(btn))
+			desc = ""
+			cost = 0
+			if btn['level'] < 1:
+				cost = 1
+			else:
+				cost = btn['level']
+			desc += "	Costs: " + str(
+				cost * btn['cost']) + " IP (" + str(cost) + " x " + str(
+					btn['cost']) + ")"
+			ttk.TTkLabel(parent=skillPopWin, pos=(0, 1), text=desc)
+			ttk.TTkButton(parent=skillPopWin, pos=(30, 1), text="BUY")
+			_splitTextLabel([0, 3], 36, skillPopWin, btn['description'])
+			skillPopWin.raiseWidget()
+		
+		def _updateSkill(btn):
+			pop = ttk.TTkWindow(parent=self.root.viewport(),pos=(4,4),size=(38,10))
+			ttk.TTkLabel(parent=pop,text=type(btn),pos=(0,3))
+			ttk.TTkLabel(parent=pop,text=btn,pos=(0,0))
+			#if v == "" or skl == None: return
+			#for x in self.punk.skills:
+			#	if x[name] == v.name:
+			#		x[level] = v.level
+			
+		def _dynamicSkills(frame, stat):
 			skillRowSize = 0
-			for thing in list:
-				row = 22 - len(thing.name)
-				dots = "." * row
-				ttk.TTkLabel(parent=frame,
-							 pos=(5 + len(thing.name), skillRowSize),
-							 text=dots)  #.menuButtonClicked.connect(_test)
-				thing.check = ttk.TTkCheckbox(parent=frame,
-											  pos=(0, skillRowSize),
-											  size=(3, 1))
-				thing.button = ttk.TTkButton(parent=frame,
-											 pos=(3, skillRowSize),
-											 text=thing.name)
-				thing.spin = ttk.TTkSpinBox(parent=frame,
-										  	pos=(25, skillRowSize),
-										  	size=(4, 1),
-										  	value=thing.level,
-										 	minimum=0, maximum=10)
-				thing.spin.valueChanged.connect(lambda btn=thing : _updateSkill(skl=btn))
-				thing.button.clicked.connect(
-					lambda btn=thing: _skillButtonPull(btn))
-				ttk.TTkButton(parent=frame, pos=(29, skillRowSize),
-							  text="🎲").clicked.connect(
-								  lambda btn=thing: self._rollSkillDice(btn))
-				skillRowSize += 1
+			for thing in self.punk.skills:
+				if (stat == "SPECIAL" and thing['special'] == 'True') or (thing['stat'] == stat and thing['special'] == ''):
+					row = 24 - len(thing['name'])
+					dots = "." * row
+					
+					ttk.TTkLabel(parent=frame,
+								 pos=(5 + len(thing['name']), skillRowSize),
+								 text=dots)  #.menuButtonClicked.connect(_test)
+					check = ttk.TTkCheckbox(parent=frame,
+												  pos=(0, skillRowSize),
+												  size=(3, 1))
+					btton = ttk.TTkButton(parent=frame,
+												 pos=(3, skillRowSize),
+												 text=thing['name'])
+					spin = ttk.TTkSpinBox(parent=frame,
+												pos=(29, skillRowSize),
+												size=(4, 1),
+												value=thing['level'],
+												minimum=0, maximum=10)
+					
+					#spin.valueChanged.connect(lambda btn=thing : _updateSkill(btn))##PROBLEM CHILD
+					#btton.clicked.connect(
+					#	lambda btn=thing: _skillButtonPull(btn))
+					#ttk.TTkButton(parent=frame, pos=(29, skillRowSize),
+					#			  text="🎲").clicked.connect(
+					#				  lambda btn=thing: _rollSkillDice(name=btn))##TODO: FIX THIS
+					skillRowSize += 1
 		
 		#SPECIAL ROLE SKILLS
 		specSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -437,7 +482,7 @@ class FullSheet:
 									  size=(35, 2 + len(ss.specSkillList)),
 									  title="ROLES")
 		frameRowSize = 2 + len(ss.specSkillList)
-		_dynamicSkills(specSkillFrame, ss.specSkillList)
+		_dynamicSkills(specSkillFrame, "SPECIAL")
 
 		#ATTR
 		attrSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -445,7 +490,7 @@ class FullSheet:
 									  size=(35, 2 + len(ss.attrSkillList)),
 									  title="ATTR")
 		frameRowSize += 2 + len(ss.attrSkillList)
-		_dynamicSkills(attrSkillFrame, ss.attrSkillList)
+		_dynamicSkills(attrSkillFrame, "ATTR")
 
 		#BODY
 		bodySkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -453,7 +498,7 @@ class FullSheet:
 									  size=(35, 2 + len(ss.bodySkillList)),
 									  title="BODY")
 		frameRowSize += 2 + len(ss.bodySkillList)
-		_dynamicSkills(bodySkillFrame, ss.bodySkillList)
+		_dynamicSkills(bodySkillFrame, "BODY")
 
 		#COOL
 		coolSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -461,7 +506,7 @@ class FullSheet:
 									  size=(35, 2 + len(ss.coolSkillList)),
 									  title="COOL")
 		frameRowSize += 2 + len(ss.coolSkillList)
-		_dynamicSkills(coolSkillFrame, ss.coolSkillList)
+		_dynamicSkills(coolSkillFrame, "COOL")
 
 		#EMP
 		empSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -469,7 +514,7 @@ class FullSheet:
 									 size=(35, 2 + len(ss.empSkillList)),
 									 title="EMP")
 		frameRowSize += 2 + len(ss.empSkillList)
-		_dynamicSkills(empSkillFrame, ss.empSkillList)
+		_dynamicSkills(empSkillFrame, "EMP")
 
 		#INT
 		intSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -477,7 +522,7 @@ class FullSheet:
 									 size=(35, 2 + len(ss.intSkillList)),
 									 title="INT")
 		frameRowSize += 2 + len(ss.intSkillList)
-		_dynamicSkills(intSkillFrame, ss.intSkillList)
+		_dynamicSkills(intSkillFrame, "INT")
 
 		#REF
 		refSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
@@ -485,53 +530,14 @@ class FullSheet:
 									 size=(35, 2 + len(ss.refSkillList)),
 									 title="REF")
 		frameRowSize += 2 + len(ss.refSkillList)
-		_dynamicSkills(refSkillFrame, ss.refSkillList)
+		_dynamicSkills(refSkillFrame, "REF")
 
 		#TECH
 		techSkillFrame = ttk.TTkFrame(parent=skillScroll.viewport(),
 									  pos=(0, frameRowSize),
 									  size=(35, 2 + len(ss.techSkillList)),
 									  title="TECH")
-		
-		def _skillButtonPull(btn):
-  			pass
-		''' THIS CAN'T BE SHOWN UNTIL WE REMAKE ALL THE SKILLS
-  		
-			skillPopWin = ttk.TTkWindow(
-				parent=self.root.viewport(),
-				pos=(4, 4),
-				size=(38, _textLabelHeight(36, btn.description)),
-				title=btn.name + " " + btn.reference,
-				border=True)
-			desc = ""
-			skillStat = self.GetStat(btn.stat)
-			if btn.check.checkState(): desc += "[X] "
-			else: desc += "[ ] "
-			if btn.special: desc += "ROLE/" + btn.stat + " : "
-			else: desc += btn.stat + " : "
-
-			desc += "d10 + " + str(skillStat) + " + " + str(btn.level)
-			ttk.TTkLabel(parent=skillPopWin, pos=(0, 0), text=desc)
-			ttk.TTkButton(parent=skillPopWin, pos=(30, 0),
-						  text="ROLL").clicked.connect(
-							  lambda btn=btn: self._rollSkillDice(btn))
-
-			desc = ""
-			cost = 0
-			if btn.level < 1:
-				cost = 1
-			else:
-				cost = btn.level
-			desc += "	Costs: " + str(
-				cost * btn.cost) + " IP (" + str(cost) + " x " + str(
-					btn.cost) + ")"
-			ttk.TTkLabel(parent=skillPopWin, pos=(0, 1), text=desc)
-			ttk.TTkButton(parent=skillPopWin, pos=(30, 1), text="BUY")
-			_splitTextLabel([0, 3], 36, skillPopWin, btn.description)
-			skillPopWin.raiseWidget()
-   		'''
-			
-		_dynamicSkills(techSkillFrame, ss.techSkillList)
+		_dynamicSkills(techSkillFrame, "TECH")
 			
 	def BuildNotesBeta(self):
 		notesFrame = ttk.TTkFrame(parent=self.root.viewport(),
@@ -577,4 +583,32 @@ class FullSheet:
 
 		quitB = ttk.TTkButton(parent=saveFrame,pos=(10,0),text="QUIT",border=True,size=(10,3))
 		quitB.clicked.connect(pytermtk.viewCharacters.ShowCharacters)
-	
+
+'''
+def _dynamicSkills(frame, list):
+			skillRowSize = 0
+			for thing in list:
+				row = 22 - len(thing.name)
+				dots = "." * row
+				ttk.TTkLabel(parent=frame,
+							 pos=(5 + len(thing.name), skillRowSize),
+							 text=dots)  #.menuButtonClicked.connect(_test)
+				check = ttk.TTkCheckbox(parent=frame,
+											  pos=(0, skillRowSize),
+											  size=(3, 1))
+				btton = ttk.TTkButton(parent=frame,
+											 pos=(3, skillRowSize),
+											 text=thing.name)
+				spin = ttk.TTkSpinBox(parent=frame,
+										  	pos=(25, skillRowSize),
+										  	size=(4, 1),
+										  	value=thing.level,##THIS
+										 	minimum=0, maximum=10)
+				spin.valueChanged.connect()##PROBLEM CHILD
+				btton.clicked.connect(
+					lambda btn=thing: _skillButtonPull(btn))
+				ttk.TTkButton(parent=frame, pos=(29, skillRowSize),
+							  text="🎲").clicked.connect(
+								  lambda btn=thing: _rollSkillDice(btn))##TODO: FIX THIS
+				skillRowSize += 1
+	'''
