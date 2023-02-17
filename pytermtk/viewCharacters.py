@@ -13,6 +13,11 @@ def ShowCharacters():#TODO: Add flavor
 		root.quit()
 		pytermtk.fullCharacterSheet.FullSheet(dude)
 
+	def Blip(x):
+		sle.DeleteCharacterDB(x)
+		root.quit()
+		ShowCharacters()
+	
 	def Delete():
 		v = str([str(s) for s in scl.selectedLabels()])
 		v = v[2:-2]
@@ -20,7 +25,7 @@ def ShowCharacters():#TODO: Add flavor
 		ttk.TTkLabel(parent=pop, text="   Expunge perp's", pos=(0,0))
 		ttk.TTkLabel(parent=pop, text="      record?",pos=(0,1))
 		ttk.TTkButton(parent=pop,text="Okay",pos=(1,3),size=(6,1)).clicked.connect(
-			lambda x = v: sle.DeleteCharacterDB(x))
+			lambda x = v: Blip(x))
 		ttk.TTkButton(parent=pop,text="Cancel",pos=(10,3),size=(8,1)).clicked.connect(
 			pop.close)
 		pop.raiseWidget()

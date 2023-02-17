@@ -3,7 +3,8 @@ import punk
 import base64
 import uni
 import skill
-import json
+import pickle
+import copy
 
 skill._skillInit()
 ### Changing Handle Duplicates Characters ###
@@ -13,17 +14,22 @@ if "REPL_OWNER" in os.environ:
 	'''
  	Replit DB is a bane on my existence. The amount of persnickety BS it demands
   	and number of catches required pains me greatly. But I wanted a thing to work
-    online so I guess I need to put up with it.
+	online so I guess I need to put up with it.
  	'''
 	uni.online = True
 else:
 	uni.online = False
+	path = os.getcwd() + "/characters/"
 
 def DeleteCharacterDB(handle=""):
-	if handle.strip() == "": return
+	handle = handle.strip()
+	if handle == "": return
 
 	if uni.online:
 		del db[uni.user + '`char`' + handle.lower()]
+	else:
+		if os.path.exists(path + handle + ".pnk"):
+			os.remove(path+handle+".pnk")
 
 def SaveCharacterDB(data=None,handle=""):
 	if data == None or handle.strip() == "": return
@@ -31,7 +37,12 @@ def SaveCharacterDB(data=None,handle=""):
 	if uni.online:
 		db[uni.user + "`char`" + handle] = data.__dict__
 	else:
-		pass
+		if os.path.exists(path + handle + ".pnk"):
+			os.rename(path + handle + ".pnk", path + handle + "_BACKUP" + ".pnk")
+		outp = open(path + handle + ".pnk", 'wb')
+		pickle.dump(data, outp)
+		outp.close()
+			
 
 def LoadCharacterDB(handle=""):
 	if handle.strip() == "": return
@@ -40,6 +51,10 @@ def LoadCharacterDB(handle=""):
 		p = punk.Punk()
 		p.__dict__ = db[uni.user + "`char`" + handle.lower()].value
 		return p
+	else:
+		if os.path.exists(path + handle + ".pnk"):
+			with open(path + handle + ".pnk", 'wb') as inp:
+				return pickle.load(path + handle + ".pnk")
 
 def GetCharacters():
 	characters = []
@@ -49,7 +64,8 @@ def GetCharacters():
 			if len(x) > 1 and x[0] == uni.user:
 				characters.append(x[1]) #make this load a punk object
 	else:
-		pass
+		for x in os.listdir(path):
+			characters.append(x.split(".pnk")[0])
 
 	return characters
 	
