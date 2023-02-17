@@ -78,6 +78,27 @@ class Punk:
 				y += int(x)
 			return y
 
+	def GetStatValue(self,sta): # This is for skills
+		if sta == "ATTR":
+			return self.ATTR
+		elif sta == "BODY":
+			return self.BODY
+		elif sta == "COOL":
+			return self.COOL
+		elif sta == "EMP":
+			return self.GetCurrentEMP()
+		elif sta == "INT":
+			return self.INT
+		elif sta == "REF":
+			return self.GetCurrentREF()
+		elif sta == "TECH":
+			return self.TECH
+		elif sta == "MA":
+			return self.GetCurrentMA()
+		elif sta == "LUCK":
+			return self.LUCK
+		else: return None
+	
 	def GetTotalSkillPoints(self):
 		pass  #make return all skill points
 
