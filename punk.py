@@ -53,12 +53,11 @@ class Punk:
 		else: self.humanity = humanity
 
 		self.reputation = rep
-		#if skills == []:
-			#ss._skillInit()
-			#self.skills = ss.skillList
-		#else:
 		self.skills = skills
-
+		if self.skills == []:
+			ss._skillInit()
+			for x in ss.skillList:
+				self.skills.append(dict(x))
 		#Economy
 		self.eurobucks = eurobucks
 		self.income = income
@@ -79,6 +78,27 @@ class Punk:
 				y += int(x)
 			return y
 
+	def GetStatValue(self,sta): # This is for skills
+		if sta == "ATTR":
+			return self.ATTR
+		elif sta == "BODY":
+			return self.BODY
+		elif sta == "COOL":
+			return self.COOL
+		elif sta == "EMP":
+			return self.GetCurrentEMP()
+		elif sta == "INT":
+			return self.INT
+		elif sta == "REF":
+			return self.GetCurrentREF()
+		elif sta == "TECH":
+			return self.TECH
+		elif sta == "MA":
+			return self.GetCurrentMA()
+		elif sta == "LUCK":
+			return self.LUCK
+		else: return None
+	
 	def GetTotalSkillPoints(self):
 		pass  #make return all skill points
 
